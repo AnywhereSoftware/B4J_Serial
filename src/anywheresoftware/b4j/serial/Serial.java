@@ -15,7 +15,7 @@ import anywheresoftware.b4a.BA.ShortName;
 import anywheresoftware.b4a.BA.Version;
 import anywheresoftware.b4a.objects.collections.List;
 
-@Version(1.06f)
+@Version(1.10f)
 @ShortName("Serial")
 @DependsOn(values={"jssc"})
 public class Serial {
@@ -121,7 +121,7 @@ public class Serial {
 			public int read(byte b[], int off, int len) throws IOException {
 				try {
 					while (sp.getInputBufferBytesCount() == 0) {
-						Thread.sleep(100);
+						Thread.sleep(10);
 					}
 					byte[] read = sp.readBytes(Math.min(sp.getInputBufferBytesCount(), len));
 					System.arraycopy(read, 0, b, off, read.length);
