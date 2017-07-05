@@ -15,7 +15,7 @@ import anywheresoftware.b4a.BA.ShortName;
 import anywheresoftware.b4a.BA.Version;
 import anywheresoftware.b4a.objects.collections.List;
 
-@Version(1.10f)
+@Version(1.20f)
 @ShortName("Serial")
 @DependsOn(values={"jssc"})
 public class Serial {
@@ -23,6 +23,11 @@ public class Serial {
 	public static final int PURGE_RXCLEAR = 0x0008;
 	public static final int PURGE_TXABORT = 0x0001;
 	public static final int PURGE_TXCLEAR = 0x0004;
+	/**
+	 * Reading from the serial port is done with a background thread. ReadingThreadInterval sets the polling interval, in milliseconds.
+	 *Default value is 10.
+	 */
+	public volatile int ReadingThreadInterval = 10;
 	@Hide
 	public SerialPort sp;
 	@SuppressWarnings("unused")
@@ -121,7 +126,7 @@ public class Serial {
 			public int read(byte b[], int off, int len) throws IOException {
 				try {
 					while (sp.getInputBufferBytesCount() == 0) {
-						Thread.sleep(10);
+						Thread.sleep(ReadingThreadInterval);
 					}
 					byte[] read = sp.readBytes(Math.min(sp.getInputBufferBytesCount(), len));
 					System.arraycopy(read, 0, b, off, read.length);
